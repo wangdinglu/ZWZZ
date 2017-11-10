@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class TileOpt : MonoBehaviour {
 
 	public Text nameText;
+	public Image nameImage;
 	void OnMouseEnter()
 	{
 		
@@ -71,12 +72,16 @@ public class TileOpt : MonoBehaviour {
 		Manager.instance.nextTurn();
 		if (Manager.instance.currentPlayerIndex == 0) {
 			nameText.text="ZKW";
+			nameImage.GetComponent<Image>().sprite = Resources.Load("zkw") as Sprite;
 		} else if (Manager.instance.currentPlayerIndex == 1) {
 			nameText.text="ZKY";
+			nameImage.GetComponent<Image>().sprite = Resources.Load("zky") as Sprite;
 		} else if (Manager.instance.currentPlayerIndex == 2) {
 			nameText.text="WDL";
+			nameImage.GetComponent<Image>().sprite = Resources.Load("wdl") as Sprite;
 		} else {
 			nameText.text="ZC";
+			nameImage.GetComponent<Image>().sprite = Resources.Load("zc") as Sprite;
 		}
 	}
 
