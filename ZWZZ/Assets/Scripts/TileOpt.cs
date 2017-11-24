@@ -7,6 +7,38 @@ public class TileOpt : MonoBehaviour {
 
 	public Text nameText;
 	public Image nameImage;
+	public Canvas osCanvas;
+	public Canvas typeCanvas;
+	private Button buildButton;
+	private Button updateButton;
+	private Button pulldownButton;
+	private Button houseButton;
+	private Button officeButton;
+	private Button cafeButton;
+	private Button schoolButton;
+	private Button parkButton;
+	private Button shopButton;
+	private float positionx;
+	private float positiony;
+	private GameObject beingBuild;
+	private bool isDetected;
+	RaycastHit hit;
+
+	void Start()
+	{
+		isDetected = false;
+		buildButton = GameObject.Find ("Build").GetComponent<Button>();
+		updateButton = GameObject.Find ("Update").GetComponent<Button>();
+		pulldownButton = GameObject.Find ("PullDown").GetComponent<Button>();
+		houseButton = GameObject.Find ("House").GetComponent<Button>();
+		officeButton = GameObject.Find ("Office").GetComponent<Button>();
+		cafeButton = GameObject.Find ("Cafe").GetComponent<Button>();
+		schoolButton = GameObject.Find ("School").GetComponent<Button>();
+		shopButton = GameObject.Find ("Shop").GetComponent<Button>();
+		parkButton = GameObject.Find ("Park").GetComponent<Button>();
+		osCanvas.gameObject.SetActive (false);
+		typeCanvas.gameObject.SetActive (false);
+	}
 	void OnMouseEnter()
 	{
 		
@@ -25,70 +57,80 @@ public class TileOpt : MonoBehaviour {
 	{
 		transform.GetComponent<Renderer>().material.color = Color.white;
 	}
+		
 
-	public bool WindowSwitch = false;
-	private Rect WindowRect = new Rect(710, 260, 500, 500);
-
-	void OnGUI()
+	public void WindowContain()
 	{
-		if (WindowSwitch == true)
-		{
-			WindowRect = GUI.Window(0, WindowRect, WindowContain, "建造窗口"); //鼠标点击方块弹出建造选项窗口，目前只实现了退出和建造两个选项，未来还应该加入拆除和升级
-		}
-	}
-	public void WindowContain(int windowID)
-	{
-		if (GUI.Button(new Rect(260, 260, 230, 230), "退出")) 
-		{
-			WindowSwitch = false;
-		}
 
-		if (GUI.Button(new Rect(10, 10, 230, 230), "建造"))
+		if (buildButton.onClick.AddListener())
 		{
 			GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
 			//cube.AddComponent<HouseComponent>();
 			cube.transform.localScale = new Vector3 (10, 10, 10);
 			cube.transform.position = new Vector3 (0.0f, 0.0f, 0.0f) + gameObject.transform.position;
-			WindowSwitch = false;
 			nextPlayer ();
 		}
 
 		if (GUI.Button(new Rect(260, 10, 230, 230), "拆除"))
 		{
-			WindowSwitch = false;
 			nextPlayer ();
 		}
 
 		if (GUI.Button(new Rect(10, 260, 230, 230), "升级"))
 		{
-			WindowSwitch = false;
 			nextPlayer ();
 		}
 	}
 	//处理鼠标移上物体以及点击事件
 
+	void Update()
+	{
+		buildButton.onClick.AddListener (buildModel);
+		updateButton.onClick.AddListener (updateModel);
+		pulldownButton.onClick.AddListener (pulldownModel);
+		houseButton.onClick.AddListener (pulldownModel);
+	}
+
+	void buildModel()
+	{
+		osCanvas.gameObject.SetActive(false);
+		typeCanvas.gameObject.SetActive (true);
+
+	}
+
+	void updateModel()
+	{
+
+	}
+
+	void pulldownModel()
+	{
+
+	}
+
 	void nextPlayer()
 	{
 		Manager.instance.nextTurn();
 		if (Manager.instance.currentPlayerIndex == 0) {
-			nameText.text="ZKW";
-			nameImage.GetComponent<Image>().sprite = Resources.Load("zkw") as Sprite;
+			nameText.text="租户";
+			nameImage.GetComponent<Image>().sprite = Resources.Load("Sprites/zkw") as Sprite;
 		} else if (Manager.instance.currentPlayerIndex == 1) {
-			nameText.text="ZKY";
-			nameImage.GetComponent<Image>().sprite = Resources.Load("zky") as Sprite;
+			nameText.text="村民";
+			nameImage.GetComponent<Image>().sprite = Resources.Load("Sprites/zky") as Sprite;
 		} else if (Manager.instance.currentPlayerIndex == 2) {
-			nameText.text="WDL";
-			nameImage.GetComponent<Image>().sprite = Resources.Load("wdl") as Sprite;
+			nameText.text="政府";
+			nameImage.GetComponent<Image>().sprite = Resources.Load("Sprites/wdl") as Sprite;
 		} else {
-			nameText.text="ZC";
-			nameImage.GetComponent<Image>().sprite = Resources.Load("zc") as Sprite;
+			nameText.text="企业";
+			nameImage.GetComponent<Image>().sprite = Resources.Load("Sprites/zc") as Sprite;
 		}
 	}
 
 	void OnMouseDown()
 	{
-		WindowSwitch = true; // 如果鼠标点击方块
-
+		osCanvas.gameObject.SetActive(true);
+		WindowContain ();
+		
 	}
 
 }
